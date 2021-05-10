@@ -3,7 +3,9 @@ package com.example.qrtimerk
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -31,6 +33,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         setupPermissions()
+        timer()
         codeScanner()
     }
 
@@ -65,21 +68,33 @@ class MainActivity : AppCompatActivity() {
 
 
 
-//    private fun Timer(){
-//       val Hander: handler = new Hander();
-//
-//        var hours = seconds / 3600
-//        var minutes = (seconds % 3600) / 60
-//        var secs = second % 60
-//
-//        var time: String = String.format(Locale.getDefault(), "%d:%02d:%02d", hours,
-//        minutes, secs)
-//
-//        if(running){
-//            seconds++
-//        }
-//        handler.postDelayed(this, 1000)
-//    }
+    private fun timer(){
+
+       val han  = object: Runnable {
+           override fun run() {
+
+               var hours = seconds / 3600
+               var minutes = (seconds % 3600) / 60
+               var secs = seconds % 60
+
+               var time: String = String.format(Locale.getDefault(), "%d:%02d:%02d", hours,
+                minutes, secs)
+
+               val timeView = findViewById<TextView>(R.id.timerView)
+
+               timeView.text = time
+
+               seconds
+
+
+
+               var taskHandler = Handler()
+
+               taskHandler.postDelayed(this, 1000)
+           }
+       }
+
+    }
 
     override fun onResume(){
         super.onResume()
