@@ -1,25 +1,23 @@
 package com.example.qrtimerk
 
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.budiyev.android.codescanner.AutoFocusMode
-import com.budiyev.android.codescanner.CodeScanner
-import com.budiyev.android.codescanner.DecodeCallback
-import com.budiyev.android.codescanner.ErrorCallback
-import com.budiyev.android.codescanner.ScanMode
-
+import com.budiyev.android.codescanner.*
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 
 private const val CAMERA_REQUEST_CODE = 101
+
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,18 +25,40 @@ class MainActivity : AppCompatActivity() {
 
     private var seconds = 0
 
+    private var secCounter = 0
+
+    private var timerRunning: Boolean = true
+
+    private val handler = Handler()
+
+//    private val chronometer: Chronometer = findViewById(R.id.chronometer)
+//    private val pauseOffset: Long = 0
+//    private val running = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         setupPermissions()
-        timer()
         codeScanner()
+
+
+        val button: Button = findViewById(R.id.stBut)
+        button.setOnClickListener {
+            timerRunning = false
+//            handler.removeCallbacks(null)
+            Log.d("OMG", "stBut pressed")
+            Log.d("OMG", "timerRunning :$timerRunning")
+        }
+
+        runTimer()
+
     }
 
 
+
     private fun codeScanner(){
+
        codeScanner = CodeScanner(this, scanner_view)
 
         codeScanner.apply {
@@ -53,6 +73,9 @@ class MainActivity : AppCompatActivity() {
             decodeCallback = DecodeCallback {
                 runOnUiThread {
                     tv_textView.text = it.text
+
+                    timerRunning = false
+                    //Todo hide timer at start and shown after QR is scanned
                 }
             }
 
@@ -68,33 +91,52 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    private fun timer(){
+    private fun runTimer(){
 
-       val han  = object: Runnable {
-           override fun run() {
+        val timeView = findViewById<TextView>(R.id.timerView)
 
-               var hours = seconds / 3600
-               var minutes = (seconds % 3600) / 60
-               var secs = seconds % 60
+        handler.post(object : Runnable {
+            override fun run() {
+                val hours = seconds / 3600
+                val minutes = seconds % 3600 / 60
+                val secs = seconds % 60
 
-               var time: String = String.format(Locale.getDefault(), "%d:%02d:%02d", hours,
-                minutes, secs)
+                val time = java.lang.String
+                    .format(
+                        Locale.getDefault(),
+                        "%d:%02d:%02d", hours,
+                        minutes, secs
+                    )
 
-               val timeView = findViewById<TextView>(R.id.timerView)
+                timeView.text = time
 
-               timeView.text = time
+                if (timerRunning) {
+                    secCounter++
+                    if ( secCounter == 2){
+                        seconds += 1
+                        secCounter = 0
+                    }
 
-               seconds
+                }
 
+                handler.postDelayed(this, 500)
+            }
+        })
 
-
-               var taskHandler = Handler()
-
-               taskHandler.postDelayed(this, 1000)
-           }
-       }
 
     }
+
+
+
+    private fun save(){
+        //Todo: Save Time, in local, as database.
+    }
+
+    private fun postDAT(){
+        //Todo: POSt to cloudflare, Need link to do that
+    }
+
+
 
     override fun onResume(){
         super.onResume()

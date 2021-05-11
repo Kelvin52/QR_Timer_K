@@ -24,7 +24,9 @@
         app:autoFocusButtonVisible="true"
         app:flashButtonColor="@android:color/white"
         app:flashButtonVisible="true"
-        app:maskColor="#75000000"/>
+        app:maskColor="#75000000">
+
+    </com.budiyev.android.codescanner.CodeScannerView>
 
     <TextView
         android:id="@+id/tv_textView"
@@ -33,7 +35,7 @@
         android:layout_below="@+id/scanner_view"
         android:layout_centerHorizontal="true"
         android:layout_margin="20dp"
-        android:text="@string/scan_something"
+        android:text="scan_something...."
         android:textColor="@android:color/black" />
 
 
@@ -46,9 +48,35 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="50dp"
-        android:text="@string/timer_shows_at_the_end"
+        android:layout_marginBottom="120dp"
+        android:text="timer should shows at the end"
         android:textColor="@android:color/black" />
+
+
+
+
+
+
+<!--    <Chronometer-->
+<!--        android:id="@+id/chronometer"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_marginBottom="122dp" />-->
+
+    <Button
+        android:id="@+id/stBut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="90dp"
+        android:layout_marginEnd="86dp"
+        android:layout_marginBottom="46dp"
+        android:text="timer shows at the end" />
 
 
 </RelativeLayout>
